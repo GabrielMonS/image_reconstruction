@@ -1,11 +1,12 @@
 #include "reconstruction.h"
+#include <yaml-cpp/yaml.h>
 
 using namespace cv;
 
 void usage(){
     std::cout << "Not enough arguments were given! Please specify path to images and path where results must be stored." << std::endl;
     std::cout << "Usage example:" << std::endl;
-    std::cout << "./build/src/image_reconstruction {path to input images} {path to results folder} {number of images}" << std::endl;
+    std::cout << "./build/src/image_reconstruction ./config/example_config.yml" << std::endl;
 }
 
 int main(int argc, char** argv){
@@ -15,18 +16,38 @@ int main(int argc, char** argv){
     std::string destination = "/home/gabrielmonteagudo/LogicMelt/Maier/Imaxes_Brillos/";
     std::string destRec = "/home/gabrielmonteagudo/LogicMelt/Maier/Imaxes_Reconstruidas/imaxe_reconstruida.png";    
     int nImgs = 50;
-    */
+    
     
     if(argc < 4){
         usage();
         return -1;
     }
+    */
+
+    if(argv[1] == NULL){
+        usage();
+        return -1;
+    }
+
 
     std::string resultName = "reconstructed_image.png";
-    std::string location = argv[1];
-    std::string destRec = argv[2] + resultName;
-    std::string nStr = argv[3];
-    int nImgs = std::stoi(nStr, nullptr, 10);;
+    std::string config_path = argv[1];
+
+    YAML::Node config_file = YAML::LoadFile(config_path);
+    YAML::Node config = config_file["config"];
+    YAML::Node sequence_config = config["sequence_config"];
+    YAML::Node program_config = config["program_config"];
+
+    std::string location = sequence_config["source_location"].as<std::string>();
+    std::string destination = sequence_config["results_location"].as<std::string>();
+    int nImgs = sequence_config["image_count"].as<int>();
+
+    int white_threshold = program_config["white_threshold"].as<int>();
+    float white_percentage = program_config["white_percentage"].as<float>();
+    int pixel_add_height = program_config["pixel_add_height"].as<int>();
+    int pixel_offset = program_config["pixel_offset"].as<int>();
+
+    std::string destRec = destination + resultName;
 
     auto start_read = std::chrono::steady_clock::now();
 
@@ -70,7 +91,7 @@ int main(int argc, char** argv){
     auto start_reconstruction = std::chrono::steady_clock::now();
     std::cout << "Reconstructing..." << std::endl;
 
-    cv::Mat reconstructed = logicmelt::reconstruct_from_lightband(images);
+    cv::Mat reconstructed = logicmelt::reconstruct_from_lightband(images, white_threshold, white_percentage, pixel_add_height, pixel_offset);
 
     auto end_reconstruction = std::chrono::steady_clock::now();
     std::cout << "Reconstruction finished!" << std::endl;

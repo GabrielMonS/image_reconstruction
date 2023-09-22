@@ -17,7 +17,7 @@
 #define WHITE_PERCENTAGE 70.0f
 //Number of pixels to use for reconstruction.
 //It should correspond to the amount of pixels the piece moves betweeen images.
-#define PIXEL_ADD_HEIGHT 15
+#define PIXEL_ADD_HEIGHT 11
 //Offset applied to the row number where lightband starts
 #define PIXEL_OFFSET 10
 
@@ -37,7 +37,7 @@ namespace logicmelt{
      * 
      * @return Index of the row where the lightband begins.
     */
-    int find_lightband_first_row(cv::Mat image);
+    int find_lightband_first_row(cv::Mat image, int wt, float wp);
     
     /** @brief Method for drawing a rectangle around the lightband in an image.
      * 
@@ -53,6 +53,6 @@ namespace logicmelt{
      * 
      * @return Reconstructed image.
     */
-    cv::Mat reconstruct_from_lightband(std::vector<cv::Mat> images);
+    cv::Mat reconstruct_from_lightband(std::vector<cv::Mat> images, int wt, float wp, int ph, int po);
 
 }

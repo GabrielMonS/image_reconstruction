@@ -1,0 +1,10 @@
+config:
+  sequence_config:
+    source_location: /home/gabrielmonteagudo/LogicMelt/Maier/Imaxes_Probas/
+    results_location: /home/gabrielmonteagudo/LogicMelt/Maier/Imaxes_Reconstruidas/
+    image_count: 50
+  program_config:
+    white_threshold: 255
+    white_percentage: 70.0
+    pixel_add_height: 11
+    pixel_offset: 10

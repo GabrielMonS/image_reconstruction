@@ -10,6 +10,6 @@ In order for it to work, there are a series of parameters that must be adjusted:
 - PIXEL_ADD_HEIGHT : Amount of pixels that will be extracted from each imaxe to compose the final one. It should be as close as possible to the amount of pixels the surface moves between images in order to make a good reconstruction. Larger values will result in an elongated image, while shorter values will result in a compressed image.
 - PIXEL_OFFSET : Offset to be applied to the first lightband row before extracting the specified amount of pixels. Useful when the lightband has a slight angle or the corners of the lightband bend a bit in the extremes of the surface.
 
-These parameters must be modified in the header file. In the future, they will be loaded from a configuration file in YAML format.
+These parameters can be modified through a YAML file that contains the information. An example file has been provided.
 
 

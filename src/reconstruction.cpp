@@ -32,7 +32,7 @@ namespace logicmelt{
         return rowIndexes;
     }
 
-    int find_lightband_first_row(cv::Mat input){
+    int find_lightband_first_row(cv::Mat input, int wt, float wp){
         
         int rowIndex = -1;
 
@@ -45,13 +45,13 @@ namespace logicmelt{
             count = 0;
             for(int j = 0; j < cols; ++j){
                 size_t index = i*cols + j;
-                if(input.data[index] >= WHITE_THRESHOLD){
+                if(input.data[index] >= wt){
                     count++;
                 }
             }
 
             percentage = 100 * ((float)count / cols);
-            if((percentage) >= WHITE_PERCENTAGE){
+            if((percentage) >= wp){
 
                 rowIndex = i;
 
@@ -78,7 +78,7 @@ namespace logicmelt{
 
     }
 
-    cv::Mat reconstruct_from_lightband(std::vector<cv::Mat> images){
+    cv::Mat reconstruct_from_lightband(std::vector<cv::Mat> images, int wt, float wp, int ph, int po){
       
         std::vector<cv::Mat> subimages;
         cv::Mat resultImg;
@@ -90,10 +90,10 @@ namespace logicmelt{
         
         for(int n = 0; n < nImgs; n++){
             
-            int first = find_lightband_first_row(images.at(n));
+            int first = find_lightband_first_row(images.at(n), wt, wp);
 
             if(first != -1){ 
-                cv::Range rows(first - PIXEL_ADD_HEIGHT - PIXEL_OFFSET, first - PIXEL_OFFSET);
+                cv::Range rows(first - ph - po, first - po);
                 cv::Range cols(1, 1920);
                 cv::Mat sub = images.at(n)(rows, cols);
                 subimages.push_back(sub);
